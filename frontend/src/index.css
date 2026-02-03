@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+* {
+    font-family: 'Rajdhani', serif;
+}
+
+:root {
+    --theme-background: #615FFF;
+    --main-background: #F8F8FB;
+    --post-background: #FFFFFF;
+    --theme-light-background: #7C86FF;
+    --theme-dark-background: #432DD7;
+    --contrast-colour: #FFFFFF;
+    --main-text-colour: #314158;
+    --subtext-colour: #4A5565;
+    --prose-colour: #4B5563;
+    --prose-heading-colour: #475569;
+    --contrast-colour-negative: #000000;
+    --highlight-colour: #A3B3FF;
+    --summary-colour: #6A7282;
+}
+
+.theme-dark {
+    --theme-background: #7CCF00;
+    --main-background: #161B28;
+    --post-background: #1D2333;
+    --theme-light-background: #9AE600;
+    --theme-dark-background: #497D00;
+    --contrast-colour: #000000;
+    --main-text-colour: #FFFFFF;
+    --subtext-colour: #E7E3E4;
+    --prose-colour: #E7E3E4;
+    --prose-heading-colour: #E7E3E4;
+    --contrast-colour-negative: #FFFFFFE4;
+    --highlight-colour: #BBF451;
+    --summary-colour: #E7E3E4;
+}
+
+body {
+    background-color: var(--main-background);
+}
+
+.prose {
+    color: var(--prose-colour);
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+    color: var(--prose-heading-colour);
+    margin-bottom: 0;
+}

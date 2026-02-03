@@ -1,0 +1,14 @@
+# Ignore node_modules in ANY folder
+**/node_modules/
+
+# Ignore build/dist folders in frontend
+**/dist/
+**/build/
+
+# Ignore environment files (API keys, DB URLs)
+.env
+.env.local
+*.env
+
+# Ignore system files
+.DS_Store
