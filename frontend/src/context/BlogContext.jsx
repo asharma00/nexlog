@@ -9,6 +9,10 @@ export const BlogContext = createContext();
 const BlogContextProvider = (props) => {
     const backendURL = import.meta.env.VITE_BACKEND_URL;
     console.log('Backend URL:', import.meta.env);
+    if (!backendURL) {
+        throw new Error( 'VITE_BACKEND_URL is undefined. This build is invalid.' );
+    }
+
     const navigate = useNavigate();
     const initialToken = localStorage.getItem('token');
 
