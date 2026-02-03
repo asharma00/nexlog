@@ -11,7 +11,7 @@ import commentRouter from './routes/commentRoute.js'
 
 
 //app configuration
-const port = 3000;
+const port = process.env.PORT;
 const app = express();
 const server = createServer(app);
 connectDB();
@@ -21,11 +21,11 @@ connectCloudinary();
 //middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({origin: "http://localhost:5173", credentials: true}));
+app.use(cors({origin: process.env.VITE_FRONTEND_URL, credentials: true}));
 
 const io = new Server(server, {
     cors: {
-        origin: 'http://localhost:5173',
+        origin: process.env.VITE_FRONTEND_URL,
         methods: ['GET', 'POST'],
         credentials: true
     }

@@ -8,6 +8,7 @@ export const BlogContext = createContext();
 
 const BlogContextProvider = (props) => {
     const backendURL = import.meta.env.VITE_BACKEND_URL;
+    console.log('Backend URL:', import.meta.env);
     const navigate = useNavigate();
     const initialToken = localStorage.getItem('token');
 
