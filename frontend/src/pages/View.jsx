@@ -55,12 +55,15 @@ function View() {
         <>
             {/* blog heading */}
             <div className='mt-10 md:mt-20 mx-10 flex flex-col items-center text-center'>
-                <img src={filteredBlog.thumbnail} className='mb-10 rounded-lg lg:w-2/3 aspect-video' />
+                <div className='mb-10 rounded-lg border border-(--main-text-colour) lg:w-2/3 xl:w-1/2 aspect-video'>
+                    <img src={filteredBlog.thumbnail} className='p-1 rounded-lg w-full' />
+                </div>
+                
                 <h1 className='text-2xl sm:text-5xl font-bold text-(--main-text-colour)'> {filteredBlog.title} </h1>
                 <div className='flex flex-row items-center justify-evenly w-full sm:w-3/4 mt-3'>
                     <div className='flex flex-row items-center justify-center'>
                         <div className='h-10 w-10 mr-1'> <Avatar src={filteredBlog.username.profile} /> </div>
-                        <Link className='text-sm sm:text-base mr-3 font-semibold text-(--main-text-colour) hover:underline'><p>{filteredBlog.username.username}</p></Link>
+                        <Link to={`/profile/${filteredBlog.username._id}`} className='text-sm sm:text-base mr-3 font-semibold text-(--main-text-colour) hover:underline'><p>{filteredBlog.username.username}</p></Link>
                     </div>
                     <div className='flex flex-row items-center justify-center'>
                         <AccessTimeIcon className='text-(--main-text-colour)' />
@@ -68,6 +71,7 @@ function View() {
                     </div>
                 </div>
             </div>
+
 
             <div className='flex flex-col mx-10 my-5 md:my-10'>
                 {/* blog content */}
@@ -83,16 +87,22 @@ function View() {
                     </div>
                 </div>
 
+
                 {/* add comment */}
-                <div className={`h-max sm:mx-10 lg:mx-30 xl:mx-50`}>
-                    <h2 className='text-base sm:text-lg text-(--subtext-colour) sm:mx-auto pb-2 font-semibold'>Add a comment</h2>
-                    <div className='mb-10'>
-                        <form onSubmit={onSubmitCommentForm}>
-                            <textarea placeholder='Comment' className='w-full p-2 border border-gray-300 rounded outline-none h-48 text-(--subtext-colour)' value={ comment } onChange={(e) => setComment(e.target.value)} />
-                            <button className='bg-(--theme-background) text-(--contrast-colour) rounded p-2 px-8 hover:scale-102 transition-all cursor-pointer' type='submit'>Add</button>
-                        </form>
-                    </div>
-                </div>
+                { 
+                    filteredBlog.status === 'published' ?
+                        <div className={`h-max sm:mx-10 lg:mx-30 xl:mx-50`}>
+                            <h2 className='text-base sm:text-lg text-(--subtext-colour) sm:mx-auto pb-2 font-semibold'>Add a comment</h2>
+                            <div className='mb-10'>
+                                <form onSubmit={onSubmitCommentForm}>
+                                    <textarea placeholder='Comment' className='w-full p-2 border border-gray-300 rounded outline-none h-48 text-(--subtext-colour)' value={ comment } onChange={(e) => setComment(e.target.value)} />
+                                    <button className='bg-(--theme-background) text-(--contrast-colour) rounded p-2 px-8 hover:scale-102 transition-all cursor-pointer' type='submit'>Add</button>
+                                </form>
+                            </div>
+                        </div>
+                        : null
+                }
+
 
                 {/* comment section */}
                 <div className={`bg-(--post-background) shadow rounded-lg ${filteredBlog.comments.length !== 0 ? '' : 'hidden'} h-max sm:mx-10 lg:mx-30 xl:mx-50 mb-8`}>

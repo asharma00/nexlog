@@ -53,7 +53,7 @@ function Navbar({ setToken }) {
                 <div className={`${profileMenu ? '' : 'hidden'} bg-(--post-background) flex flex-col w-max shadow rounded-md absolute right-0 top-1/8 sm:top-1/9 mr-10 z-999`}>
                     <p className={`${!token ? 'hidden' : ''} ${profileMenuStyle} ${profileMenuBorderStyle} sm:hidden`} onClick={() => {setProfileMenu(!profileMenu); setSmallSearchBar(!smallSearchBar)}}>Search blog</p>
                     <Link to={'/create'} className={`${profileMenuStyle} ${profileMenuBorderStyle}`} onClick={() => setProfileMenu(!profileMenu)}> Create blog </Link>
-                    <Link to={'/profile'} className={`${profileMenuStyle} ${profileMenuBorderStyle}`} onClick={() => setProfileMenu(!profileMenu)}> My profile </Link>
+                    <Link to={`/profile/${userData?._id}`} className={`${profileMenuStyle} ${profileMenuBorderStyle}`} onClick={() => setProfileMenu(!profileMenu)}> My profile </Link>
                     <Link to={'/'} className={`${profileMenuStyle}`} onClick={() => {setProfileMenu(!profileMenu); logout()}}> Logout </Link>
                 </div>
             </>

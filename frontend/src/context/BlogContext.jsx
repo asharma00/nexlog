@@ -3,16 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { socket } from '../util/Socket.js'
+import { useCallback } from 'react'
 
 export const BlogContext = createContext();
 
 const BlogContextProvider = (props) => {
     const backendURL = import.meta.env.VITE_BACKEND_URL;
-    console.log('Backend URL:', import.meta.env);
-    if (!backendURL) {
-        throw new Error( 'VITE_BACKEND_URL is undefined. This build is invalid.' );
-    }
-
+    
     const navigate = useNavigate();
     const initialToken = localStorage.getItem('token');
 
@@ -28,20 +25,28 @@ const BlogContextProvider = (props) => {
 
     const triggerRefresh = () => setRefreshKey(prev => prev + 1);
 
-    const getBlogList = async() => {
+
+    const getBlogList = useCallback(async() => {
         try {
             const response = await axios.get(backendURL + '/api/blog/list');
-            if(response.data.success) 
-                setBlogs(response.data.blogs);    
+            if(response.data.success) {
+                setBlogs(prev => {
+                    const next = response.data.blogs;
+                    if (JSON.stringify(prev) === JSON.stringify(next))
+                        return prev;
+                    return next;
+                });
+            }   
         } 
         catch (error) {
             toast.error(error.message);
         }
-    }
+    }, [])
 
-    const getUserData = async() => {
+
+    const getUserData = useCallback(async() => {
         try {
-            const response = await axios.get(backendURL + '/api/user/get', {headers: { token }});
+            const response = await axios.get(backendURL + '/api/user/get/self', {headers: { token }});
             if(response.data.success) {
                 setUserData(response.data.userData);
                 if(response.data.userData.theme === 'dark')
@@ -51,7 +56,8 @@ const BlogContextProvider = (props) => {
         catch (error) {
             toast.error(error.message);    
         }
-    }
+    }, [token])
+
 
     const logout = () => {
         setToken(null);
@@ -59,6 +65,7 @@ const BlogContextProvider = (props) => {
         setUserData(null);
         setDarkMode(false);
     }
+
 
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
@@ -72,26 +79,38 @@ const BlogContextProvider = (props) => {
 
 
     useEffect(() => {
-        if (!refreshKey || !token) return;
-        const timer = setTimeout(() => {
-            getUserData();
-        }, 5000);
-        return () => clearTimeout(timer);
-    }, [refreshKey, token]);
-
-
-    useEffect(() => {
-        if (!refreshKey) return;
-        const timer = setTimeout(() => {
-            getBlogList();
-        }, 5000);
-        return () => clearTimeout(timer);
-    }, [refreshKey]);
-
-
-    useEffect(() => {
         if (token) getUserData();
     }, [token]);
+
+
+    // useEffect(() => {
+    //     if (!refreshKey || !token) return;
+    //     const timer = setTimeout(() => {
+    //         getUserData();
+    //     }, 5000);
+    //     return () => clearTimeout(timer);
+    // }, [refreshKey, token]);
+
+
+    // useEffect(() => {
+    //     if (!refreshKey) return;
+    //     const timer = setTimeout(() => {
+    //         getBlogList();
+    //     }, 5000);
+    //     return () => clearTimeout(timer);
+    // }, [refreshKey]);
+
+
+    // useEffect(() => {
+    //     if (!token) return;
+
+    //     // const interval = setInterval(() => {
+    //         getUserData();
+    //         getBlogList();
+    //     // }, 5000);
+
+    //     // return () => clearInterval(interval);
+    // }, [refreshKey, getUserData, getBlogList]);
 
 
     useEffect(() => {
@@ -110,8 +129,8 @@ const BlogContextProvider = (props) => {
     useEffect(() => {
         if (!socket) return;
 
-        socket.on('userDataFetched', () => triggerRefresh());
-        socket.on('blogDataFetched', () => triggerRefresh());
+        // socket.on('userDataFetched', () => triggerRefresh());
+        // socket.on('blogDataFetched', () => triggerRefresh());
         socket.on('commentPosted', () => triggerRefresh());
         socket.on('blogPosted', () => triggerRefresh());
         socket.on('blogDeleted', () => triggerRefresh());
@@ -120,10 +139,12 @@ const BlogContextProvider = (props) => {
         socket.on('userProfileUpdated', () => triggerRefresh());
         socket.on('userThemeUpdated', () => triggerRefresh());
         socket.on('blogSavedOrRemoved', () => triggerRefresh());
+        socket.on('userOtherDataFetched', () => triggerRefresh());
+        socket.on('usernameUpdated', () => triggerRefresh());
 
         return () => {
-            socket.off('userDataFetched');
-            socket.off('blogDataFetched');
+            // socket.off('userDataFetched');
+            // socket.off('blogDataFetched');
             socket.off('commentPosted');
             socket.off('blogPosted');
             socket.off('blogDeleted');
@@ -132,7 +153,8 @@ const BlogContextProvider = (props) => {
             socket.off('userProfileUpdated');
             socket.off('userThemeUpdated');
             socket.off('blogSavedOrRemoved');
-            // socket.off('commentPosted');
+            socket.off('userOtherDataFetched');
+            socket.off('usernameUpdated');
         };
     }, [socket]);
 

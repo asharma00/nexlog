@@ -20,7 +20,7 @@ function Blog({id, username, posted, title, summary, category, tags, profile, th
                     <div className='absolute top-3 right-3 w-10 h-10 rounded-full flex items-center justify-center shadow-md z-10 bg-(--main-background)'
                         onClick={(e) => {e.preventDefault(); saveBlog(backendURL, token, id, userId, !saved)}}>
                         {   
-                            saved ? 
+                            saved && token ? 
                             <BookmarkIcon className='text-(--theme-background)' /> : 
                             <BookmarkBorderIcon className='text-(--theme-background)' />
                         }

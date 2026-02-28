@@ -9,7 +9,7 @@ import Loading from '../util/Loading'
 import { addBlog, updateBlog } from '../util/BlogOperations.js'
 
 function Create({mode}) {
-    const { backendURL, token, navigate, blogs } = useContext(BlogContext);
+    const { backendURL, token, navigate, blogs, userData } = useContext(BlogContext);
     
     var blogId, blogDetails;
     if(mode === 'edit') {
@@ -145,14 +145,14 @@ function Create({mode}) {
             formData.append('tags', JSON.stringify(tagsArray));
             formData.append('blog', html);
             formData.append('status', pendingStatusRef.current);
-            formData.append('id', blogDetails._id);
+            if(mode === 'edit') formData.append('id', blogDetails._id);
 
             thumbnail && formData.append('thumbnail', thumbnail);
 
             mode === 'edit' ? updateBlog(backendURL, token, formData, pendingStatusRef.current) : addBlog(backendURL, token, formData);
 
             setIsLoading(false);
-            navigate('/profile');
+            navigate(`/profile/${userData._id}`);
         } 
         catch (error) {
             toast.error(error.message);

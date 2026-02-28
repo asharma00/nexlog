@@ -7,7 +7,7 @@ function Home() {
     const blogsList = blogs?.filter(item => item.status === 'published');
 
     const filterSearchedBlogs = blogsList?.filter(item => item.title.toLowerCase().includes(searchedWords.toLowerCase()));
-    
+
     return (
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mx-8 sm:mx-16 xl:mx-40'>
             {

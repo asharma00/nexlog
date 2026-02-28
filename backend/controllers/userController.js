@@ -38,7 +38,6 @@ const registerUser = async(req, res) => {
         res.json({success: true, token});
     }
     catch (error) {
-        console.log(error);
         res.json({success: false, message: error.message});
     }
 }
@@ -96,6 +95,7 @@ const getUserData = async(req, res) => {
                     model: 'user'
                 }
             });
+
         res.json({success: true, userData});
         io.emit('userDataFetched'); 
     }
@@ -134,4 +134,54 @@ const updateUserTheme = async(req, res) => {
     }
 }
 
-export { registerUser, loginUser, getUserData, updateUserProfile, updateUserTheme }
+const getOtherUserData = async(req, res) => {
+    try {
+        const io = req.app.get('io');
+        const { userId } = req.query;
+        const userData = await userModel.findById(userId)
+            .select('username profile')
+            .populate({
+                path: 'createdBlogs',
+                populate: {
+                    path: 'username',
+                    model: 'user',
+                    select: 'username profile'
+                }
+            });
+
+        res.json({success: true, userData});
+        io.emit('userOtherDataFetched'); 
+    }
+    catch (error) {
+        res.json({success: false, message: error.message});
+    }
+}
+
+const checkUsernameAvailability = async(req, res) => {
+    try {
+        const io = req.app.get('io');
+        const { username } = req.query;
+        const exists = await userModel.findOne({username: username});
+
+        res.json({success: true, exists: exists ? false : true});
+        io.emit('usernameChecked');
+    } catch (error) {
+        res.json({success: false, message: error.message});
+    }
+}
+
+const updateUsername = async(req, res) => {
+    try {
+        const io = req.app.get('io');
+        const { username } = req.body;
+        await userModel.findByIdAndUpdate(req.userId, {username: username});
+
+        res.json({success: true, username});
+        io.emit('usernameUpdated');
+    }
+    catch (error) {
+        res.json({success: false, message: error.message});
+    }
+}
+
+export { registerUser, loginUser, getUserData, updateUserProfile, updateUserTheme, getOtherUserData, checkUsernameAvailability, updateUsername }

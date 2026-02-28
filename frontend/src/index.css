@@ -20,6 +20,8 @@
     --contrast-colour-negative: #000000;
     --highlight-colour: #A3B3FF;
     --summary-colour: #6A7282;
+    --prose-codeblock-colour: #F4F4F4;
+    --prose-codeblock-background: #111111;
 }
 
 .theme-dark {
@@ -36,6 +38,8 @@
     --contrast-colour-negative: #FFFFFFE4;
     --highlight-colour: #BBF451;
     --summary-colour: #E7E3E4;
+    --prose-codeblock-colour: #161B28;
+    --prose-codeblock-background: #DDDEE2;
 }
 
 body {
@@ -49,4 +53,14 @@ body {
 .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
     color: var(--prose-heading-colour);
     margin-bottom: 0;
+}
+
+.prose b, .prose strong, .prose i, .prose u, .prose blockquote, .prose a {
+    color: var(--contrast-colour-negative);
+}
+
+.prose .ql-code-block-container {
+    background-color:  var(--prose-codeblock-background);
+    color:  var(--prose-codeblock-colour);
+    padding: 0.5rem;
 }

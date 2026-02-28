@@ -4,6 +4,7 @@ import imageCloudinaryUploader from '../util/imageCloudinaryUploader.js'
 
 const addBlog = async(req, res) => {
     try {
+        console.log('Hiiiiii')
         const io = req.app.get('io');
         
         const {title, summary, tags, category, blog, status} = req.body;
@@ -23,10 +24,10 @@ const addBlog = async(req, res) => {
             username: req.userId,
             comments: []
         }
-
+        
         const newBlog = new blogModel(blogData);
         await newBlog.save();
-
+        
         await userModel.findByIdAndUpdate(
             req.userId, {$push: {createdBlogs: {$each: [newBlog._id], $position: 0 }}}
         );
@@ -66,7 +67,7 @@ const singleBlog = async(req, res) => {
         const blog = await blogModel.findById(blogId)
             .populate({
                 path: 'username',
-                select: 'username profile'
+                select: 'username profile _id'
             })
             .populate({
                 path: 'comments',

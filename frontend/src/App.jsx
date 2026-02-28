@@ -17,7 +17,7 @@ function App() {
         <Routes>
           <Route path='/' element={ <Home/> } />
           <Route path='/view/:blogId' element={ <View/> } />
-          <Route path='/profile' element={ <Profile/> } />
+          <Route path='/profile/:userId' element={ <Profile/> } />
           <Route path='/login' element={ <Login/> } />
           <Route path='/create' element={ <Create mode='create' /> } />
           <Route path="/edit/:blogId" element={<Create mode='edit' />} />
