@@ -4,7 +4,6 @@ import imageCloudinaryUploader from '../util/imageCloudinaryUploader.js'
 
 const addBlog = async(req, res) => {
     try {
-        console.log('Hiiiiii')
         const io = req.app.get('io');
         
         const {title, summary, tags, category, blog, status} = req.body;

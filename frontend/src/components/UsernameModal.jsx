@@ -53,7 +53,6 @@ function UsernameModal({open, setOpen}) {
     const changeUsername = async() => {
         try {
             const username = usernameManual.length != 0 ? usernameManual : usernameAutomated;
-            alert(username)
             const response = await axios.post(backendURL + '/api/user/change/username', {username}, {headers: {token}});
             if(response.data.success) {
                 handleClose();
