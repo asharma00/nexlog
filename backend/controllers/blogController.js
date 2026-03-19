@@ -147,7 +147,7 @@ const updateBlog = async(req, res) => {
 const saveBlog = async(req, res) => {
     try {
         const io = req.app.get('io');
-        console.log(req.body.saved)
+        
         if (req.body.saved) {
             await blogModel.findByIdAndUpdate(req.body.id, {$addToSet: {saved: req.body.userId}});
             await userModel.findByIdAndUpdate(req.userId, {$addToSet: {savedBlogs: req.body.id}});
